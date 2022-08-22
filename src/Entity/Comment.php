@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
@@ -31,6 +32,12 @@ class Comment
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $photoFilename;
+
+    #[ORM\PrePersist]
+    public function setCreatedValue()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function __toString(): string
     {
